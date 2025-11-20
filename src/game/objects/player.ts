@@ -5,6 +5,7 @@ export default class Player {
     bullets: Phaser.Physics.Arcade.Group;
     fireTimer: Phaser.Time.TimerEvent | null = null;
     health: number = 4;
+    isMega: boolean = true;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         this.scene = scene;
@@ -30,19 +31,48 @@ export default class Player {
 
     fire() {
         if (!this.sprite.active) return;
-        const bullet = this.bullets.get(
-            this.sprite.x,
-            this.sprite.y - 30,
-            "sheet",
-            "laserGreen02.png"
-        ) as Phaser.Physics.Arcade.Image;
 
-        if (!bullet) return;
+        if (this.isMega) {
+            const bullet1 = this.bullets.get(
+                this.sprite.x - 23,
+                this.sprite.y - 30,
+                "sheet",
+                "laserGreen02.png"
+            ) as Phaser.Physics.Arcade.Image;
 
-        bullet.setActive(true);
-        bullet.setVisible(true);
-        bullet.setVelocityY(-400);
-        bullet.setScale(0.3);
+            const bullet2 = this.bullets.get(
+                this.sprite.x + 23,
+                this.sprite.y - 30,
+                "sheet",
+                "laserGreen02.png"
+            ) as Phaser.Physics.Arcade.Image;
+
+            if (!bullet1 || !bullet2) return;
+
+            bullet2.setActive(true);
+            bullet2.setVisible(true);
+            bullet2.setVelocityY(-400);
+            bullet2.setScale(0.3);
+
+            bullet1.setActive(true);
+            bullet1.setVisible(true);
+            bullet1.setVelocityY(-400);
+            bullet1.setScale(0.3);
+        } else {
+            const bullet2 = this.bullets.get(
+                this.sprite.x,
+                this.sprite.y - 30,
+                "sheet",
+                "laserGreen02.png"
+            ) as Phaser.Physics.Arcade.Image;
+
+            if (!bullet2) return;
+
+            bullet2.setActive(true);
+            bullet2.setVisible(true);
+            bullet2.setVelocityY(-400);
+            bullet2.setScale(0.3);
+        }
     }
 
     takeHit(amount = 1) {

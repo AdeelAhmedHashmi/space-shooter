@@ -27,6 +27,7 @@ export default class Enemy {
             }${Phaser.Math.Between(1, 5)}.png`
         );
         this.sprite.setScale(0.5);
+        this.sprite.setDepth(5);
 
         // link the class instance to the sprite
         this.sprite.setData("ref", this);
@@ -39,7 +40,7 @@ export default class Enemy {
             callback: () => this.fire(),
         });
 
-        this.speed = Phaser.Math.Between(50, 100);
+        this.speed = Phaser.Math.Between(100, 200);
     }
 
     fire() {

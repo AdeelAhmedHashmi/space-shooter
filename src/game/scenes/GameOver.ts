@@ -39,7 +39,7 @@ export default class GameOver extends Phaser.Scene {
         // Restart button
         const restart = this.add
             .text(width / 2, height / 2 + 80, "Restart", {
-                fontSize: "28px",
+                fontSize: "20px",
                 color: "#00ff00",
                 backgroundColor: "#111",
                 padding: { x: 20, y: 10 },
