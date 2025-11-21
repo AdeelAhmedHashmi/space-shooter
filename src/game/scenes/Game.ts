@@ -2,14 +2,20 @@ import Phaser from "phaser";
 import { EventBus } from "../EventBus";
 import Player from "../objects/player";
 import Enemy from "../objects/enemy";
-import UiManager from "../objects/uiManager";
+import UiManager from "../managers/uiManager";
 import Meteor from "../objects/metior";
+import Health from "../objects/bouns/health";
+import Shield from "../objects/bouns/shield";
+import Booster from "../objects/bouns/booster";
 
 export class GameScene extends Phaser.Scene {
     ui: UiManager;
     player: Player;
     enemies: Phaser.Physics.Arcade.Group;
     enemyBullets: Phaser.Physics.Arcade.Group;
+    healths: Phaser.Physics.Arcade.Group;
+    shields: Phaser.Physics.Arcade.Group;
+    boosters: Phaser.Physics.Arcade.Group;
 
     constructor() {
         super({ key: "Game" });
@@ -43,12 +49,55 @@ export class GameScene extends Phaser.Scene {
             classType: Phaser.Physics.Arcade.Image,
             runChildUpdate: true,
         });
+        this.healths = this.physics.add.group();
+        this.shields = this.physics.add.group();
+        this.boosters = this.physics.add.group();
+
+        this.time.addEvent({
+            delay: 20000,
+            loop: true,
+            callback: () => {
+                new Health(
+                    this,
+                    this.healths,
+                    Phaser.Math.Between(0, this.scale.width),
+                    -50
+                );
+            },
+        });
+
+        this.time.addEvent({
+            delay: 10000,
+            loop: true,
+            callback: () => {
+                new Booster(
+                    this,
+                    this.boosters,
+                    Phaser.Math.Between(0, this.scale.width),
+                    -50
+                );
+            },
+        });
+
+        this.time.addEvent({
+            delay: 40000,
+            loop: true,
+            callback: () => {
+                new Shield(
+                    this,
+                    this.shields,
+                    Phaser.Math.Between(0, this.scale.width),
+                    -50
+                );
+            },
+        });
 
         this.time.addEvent({
             delay: 1000,
             loop: true,
             callback: () => this.spawnEnemy(),
         });
+
         this.time.addEvent({
             delay: 300,
             loop: true,
@@ -68,6 +117,46 @@ export class GameScene extends Phaser.Scene {
                 const enemyObj = e.getData("ref") as Enemy;
                 enemyObj.hit(1); // 1 damage per bullet
                 this.ui.addScore(1);
+            }
+        );
+
+        this.physics.add.overlap(
+            this.player.sprite,
+            this.healths,
+            (_, health) => {
+                const h = health as Phaser.Physics.Arcade.Sprite;
+
+                const healthObj = h.getData("ref") as Health;
+                this.player.increaseHealth(1);
+                this.ui.updateHealth(this.player.health);
+
+                healthObj.destroy();
+            }
+        );
+
+        this.physics.add.overlap(
+            this.player.sprite,
+            this.shields,
+            (_, shield) => {
+                const h = shield as Phaser.Physics.Arcade.Sprite;
+
+                const shieldObj = h.getData("ref") as Shield;
+                this.player.makeShield();
+
+                shieldObj.destroy();
+            }
+        );
+
+        this.physics.add.overlap(
+            this.player.sprite,
+            this.boosters,
+            (_, booster) => {
+                const h = booster as Phaser.Physics.Arcade.Sprite;
+
+                const boosterObj = h.getData("ref") as Shield;
+                this.player.upgradeShip();
+
+                boosterObj.destroy();
             }
         );
 

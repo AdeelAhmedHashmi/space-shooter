@@ -1,14 +1,15 @@
 import Phaser from "phaser";
 export default class Player {
-    scene: Phaser.Scene;
-    sprite: Phaser.Physics.Arcade.Sprite;
-    bullets: Phaser.Physics.Arcade.Group;
-    fireTimer: Phaser.Time.TimerEvent | null = null;
-    health: number = 4;
-    isMega: boolean = true;
-    bulletsBreak: boolean = false;
-    isProtected: boolean = false;
-    shield: Phaser.Physics.Arcade.Sprite | null;
+    private scene: Phaser.Scene;
+    private fireTimer: Phaser.Time.TimerEvent | null = null;
+    private isMega: boolean = false;
+    private bulletsBreak: boolean = false;
+    private isProtected: boolean = false;
+    private shield: Phaser.Physics.Arcade.Sprite | null;
+
+    public health: number = 4;
+    public bullets: Phaser.Physics.Arcade.Group;
+    public sprite: Phaser.Physics.Arcade.Sprite;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         this.scene = scene;
@@ -40,14 +41,23 @@ export default class Player {
         this.makeShield();
     }
 
-    emptyBullet() {
+    private emptyBullet() {
         this.bulletsBreak = true;
         this.scene.time.delayedCall(3000, () => {
             this.bulletsBreak = false;
         });
     }
 
-    fire() {
+    public upgradeShip() {
+        if (this.isMega) return;
+        this.isMega = true;
+
+        this.scene.time.delayedCall(10000, () => {
+            this.isMega = false;
+        });
+    }
+
+    public fire() {
         if (!this.sprite.active) return;
         if (this.bulletsBreak) return;
 
@@ -55,6 +65,13 @@ export default class Player {
             const bullet1 = this.bullets.get(
                 this.sprite.x - 23,
                 this.sprite.y,
+                "sheet",
+                "laserGreen02.png"
+            ) as Phaser.Physics.Arcade.Image;
+
+            const bullet = this.bullets.get(
+                this.sprite.x,
+                this.sprite.y - 30,
                 "sheet",
                 "laserGreen02.png"
             ) as Phaser.Physics.Arcade.Image;
@@ -68,15 +85,22 @@ export default class Player {
 
             if (!bullet1 || !bullet2) return;
 
-            bullet2.setActive(true);
-            bullet2.setVisible(true);
-            bullet2.setVelocityY(-400);
-            bullet2.setScale(0.3);
-
             bullet1.setActive(true);
             bullet1.setVisible(true);
             bullet1.setVelocityY(-400);
+            bullet1.setVelocityX(-20);
             bullet1.setScale(0.3);
+
+            bullet.setActive(true);
+            bullet.setVisible(true);
+            bullet.setVelocityY(-400);
+            bullet.setScale(0.3);
+
+            bullet2.setActive(true);
+            bullet2.setVisible(true);
+            bullet2.setVelocityY(-400);
+            bullet2.setVelocityX(20);
+            bullet2.setScale(0.3);
         } else {
             const bullet2 = this.bullets.get(
                 this.sprite.x,
@@ -94,9 +118,8 @@ export default class Player {
         }
     }
 
-    makeShield() {
+    public makeShield() {
         if (this.isProtected) return;
-        console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
         this.isProtected = true;
 
         this.shield = this.scene.physics.add.sprite(
@@ -113,14 +136,13 @@ export default class Player {
         });
     }
 
-    updateShield() {
+    private updateShield() {
         if (!this.shield) return;
         this.shield.x = this.sprite.x;
         this.shield.y = this.sprite.y;
     }
 
-    destroyShield() {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    private destroyShield() {
         this.isProtected = false;
 
         if (this.shield) {
@@ -131,7 +153,8 @@ export default class Player {
         this.scene.events.off("update", this.updateShield, this);
     }
 
-    takeHit(amount = 1) {
+    public takeHit(amount = 1) {
+        if (this.isProtected) return;
         this.health -= amount;
 
         console.log(this.health, ">", amount);
@@ -149,7 +172,13 @@ export default class Player {
         }
     }
 
-    update() {
+    public increaseHealth(amount: number = 1) {
+        if (this.health < 3) {
+            this.health += amount;
+        }
+    }
+
+    public update() {
         if (!this.sprite) return;
         this.bullets.children.each((b) => {
             const bullet = b as Phaser.Physics.Arcade.Image;

@@ -1,12 +1,14 @@
 import Phaser from "phaser";
 
+type BounsType = "health" | "hullets" | "shield";
+
 export default class Bonus {
     scene: Phaser.Scene;
     sprite: Phaser.Physics.Arcade.Sprite;
-    type: string;
+    type: BounsType;
     speed: number;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, type: string) {
+    constructor(scene: Phaser.Scene, x: number, y: number, type: BounsType) {
         this.scene = scene;
         this.type = type;
 
