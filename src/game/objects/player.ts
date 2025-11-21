@@ -6,10 +6,16 @@ export default class Player {
     private bulletsBreak: boolean = false;
     private isProtected: boolean = false;
     private shield: Phaser.Physics.Arcade.Sprite | null;
+    private shieldIndicator: Phaser.GameObjects.Sprite;
+    private upgradeIndicator: Phaser.GameObjects.Sprite;
+
+    // constants
 
     public health: number = 4;
     public bullets: Phaser.Physics.Arcade.Group;
     public sprite: Phaser.Physics.Arcade.Sprite;
+    public shieldDuration = 3000; // ms
+    private shieldExpireTime = 0;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         this.scene = scene;
@@ -38,7 +44,6 @@ export default class Player {
             loop: true,
             callback: () => this.emptyBullet(),
         });
-        this.makeShield();
     }
 
     private emptyBullet() {
@@ -51,10 +56,15 @@ export default class Player {
 
     public upgradeShip() {
         if (this.isMega) return;
+        this.upgradeIndicator = this.scene.add
+            .sprite(this.scene.scale.width - 25, 30, "sheet", "bolt_bronze.png")
+            .setScale(0.8);
+
         this.isMega = true;
 
         this.scene.time.delayedCall(10000, () => {
             this.isMega = false;
+            this.upgradeIndicator.destroy();
         });
     }
 
@@ -122,6 +132,15 @@ export default class Player {
     public makeShield() {
         if (this.isProtected) return;
         this.isProtected = true;
+        this.shieldExpireTime = this.scene.time.now + this.shieldDuration;
+        this.shieldIndicator = this.scene.add
+            .sprite(
+                this.scene.scale.width - 25,
+                60,
+                "sheet",
+                "shield_bronze.png"
+            )
+            .setScale(0.8);
 
         this.shield = this.scene.physics.add.sprite(
             this.sprite.x,
@@ -134,7 +153,14 @@ export default class Player {
         this.scene.events.on("update", this.updateShield, this);
         this.scene.time.delayedCall(3000, () => {
             this.destroyShield();
+            this.shieldIndicator.destroy();
         });
+    }
+
+    public getShieldRemainingTime() {
+        if (!this.isProtected) return 0;
+        const remaining = this.shieldExpireTime - this.scene.time.now;
+        return Math.max(remaining, 0);
     }
 
     private updateShield() {
@@ -190,6 +216,7 @@ export default class Player {
             return null;
         });
 
+        console.log("Remaining: ", this.getShieldRemainingTime());
         if (this.scene.input.activePointer.isDown) {
             this.sprite.x = this.scene.input.x;
             this.sprite.y = this.scene.input.y;
