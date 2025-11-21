@@ -80,7 +80,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         this.time.addEvent({
-            delay: 40000,
+            delay: 15000,
             loop: true,
             callback: () => {
                 new Shield(

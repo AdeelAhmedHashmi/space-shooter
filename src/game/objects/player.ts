@@ -8,14 +8,18 @@ export default class Player {
     private shield: Phaser.Physics.Arcade.Sprite | null;
     private shieldIndicator: Phaser.GameObjects.Sprite;
     private upgradeIndicator: Phaser.GameObjects.Sprite;
+    private shieldTimer: Phaser.GameObjects.Text;
+    private upgradeTimer: Phaser.GameObjects.Text;
 
     // constants
 
     public health: number = 4;
     public bullets: Phaser.Physics.Arcade.Group;
     public sprite: Phaser.Physics.Arcade.Sprite;
-    public shieldDuration = 3000; // ms
+    public readonly shieldDuration = 7000; // ms
+    public readonly upgradeDuration = 7000; // ms
     private shieldExpireTime = 0;
+    private upgradeExpireTime = 0;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         this.scene = scene;
@@ -60,9 +64,21 @@ export default class Player {
             .sprite(this.scene.scale.width - 25, 30, "sheet", "bolt_bronze.png")
             .setScale(0.8);
 
+        this.upgradeTimer = this.scene.add.text(
+            this.scene.scale.width - 55,
+            25,
+            this.getUpgradeRemainingTime().toString(),
+            {
+                fontStyle: "bold",
+                fontFamily: "normal",
+            }
+        );
+
+        this.upgradeExpireTime = this.scene.time.now + this.upgradeDuration;
+
         this.isMega = true;
 
-        this.scene.time.delayedCall(10000, () => {
+        this.scene.time.delayedCall(this.upgradeDuration, () => {
             this.isMega = false;
             this.upgradeIndicator.destroy();
         });
@@ -149,9 +165,19 @@ export default class Player {
             "shield3.png"
         );
 
+        this.shieldTimer = this.scene.add.text(
+            this.scene.scale.width - 55,
+            55,
+            this.getShieldRemainingTime().toString(),
+            {
+                fontStyle: "bold",
+                fontFamily: "normal",
+            }
+        );
+
         this.shield.setScale(0.5);
         this.scene.events.on("update", this.updateShield, this);
-        this.scene.time.delayedCall(3000, () => {
+        this.scene.time.delayedCall(this.upgradeDuration, () => {
             this.destroyShield();
             this.shieldIndicator.destroy();
         });
@@ -160,7 +186,13 @@ export default class Player {
     public getShieldRemainingTime() {
         if (!this.isProtected) return 0;
         const remaining = this.shieldExpireTime - this.scene.time.now;
-        return Math.max(remaining, 0);
+        return Math.round(Math.max(remaining, 0) / 1000);
+    }
+
+    public getUpgradeRemainingTime() {
+        if (!this.isMega) return 0;
+        const remaining = this.upgradeExpireTime - this.scene.time.now;
+        return Math.round(Math.max(remaining, 0) / 1000);
     }
 
     private updateShield() {
@@ -215,6 +247,20 @@ export default class Player {
 
             return null;
         });
+
+        if (this.isProtected) {
+            this.shieldTimer.setText(this.getShieldRemainingTime().toString());
+        } else {
+            this.shieldTimer?.destroy();
+        }
+
+        if (this.isMega) {
+            this.upgradeTimer.setText(
+                this.getUpgradeRemainingTime().toString()
+            );
+        } else {
+            this.upgradeTimer?.destroy();
+        }
 
         console.log("Remaining: ", this.getShieldRemainingTime());
         if (this.scene.input.activePointer.isDown) {
