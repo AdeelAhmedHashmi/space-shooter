@@ -34,7 +34,7 @@ export default class Player {
         });
 
         scene.time.addEvent({
-            delay: 10000,
+            delay: 20000,
             loop: true,
             callback: () => this.emptyBullet(),
         });
@@ -43,6 +43,7 @@ export default class Player {
 
     private emptyBullet() {
         this.bulletsBreak = true;
+        this.isMega = false;
         this.scene.time.delayedCall(3000, () => {
             this.bulletsBreak = false;
         });
