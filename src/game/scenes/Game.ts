@@ -3,6 +3,7 @@ import { EventBus } from "../EventBus";
 import Player from "../objects/player";
 import Enemy from "../objects/enemy";
 import UiManager from "../objects/uiManager";
+import Meteor from "../objects/metior";
 
 export class GameScene extends Phaser.Scene {
     ui: UiManager;
@@ -36,6 +37,7 @@ export class GameScene extends Phaser.Scene {
         );
 
         this.player = new Player(this, w / 2, h - 20);
+
         this.enemies = this.physics.add.group();
         this.enemyBullets = this.physics.add.group({
             classType: Phaser.Physics.Arcade.Image,
@@ -46,6 +48,13 @@ export class GameScene extends Phaser.Scene {
             delay: 1000,
             loop: true,
             callback: () => this.spawnEnemy(),
+        });
+        this.time.addEvent({
+            delay: 300,
+            loop: true,
+            callback: () => {
+                new Meteor(this, Phaser.Math.Between(0, this.scale.width), -50);
+            },
         });
 
         // destroy enemy wit bulits

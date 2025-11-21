@@ -24,7 +24,7 @@ export default class Meteor {
             .sprite(x, y, "sheet", frame)
             .setDepth(0);
         this.sprite.setScale(Phaser.Math.FloatBetween(0.2, 1));
-        this.sprite.setAlpha(Phaser.Math.FloatBetween(0, 0.5));
+        this.sprite.setAlpha(Phaser.Math.FloatBetween(0, 0.2));
         this.speed = Phaser.Math.FloatBetween(1, 2.9);
         this.sprite.setAngularVelocity(Phaser.Math.Between(-40, 40));
 

@@ -19,6 +19,7 @@ export default class Player {
             "playerShip1_green.png"
         );
         this.sprite.setScale(0.5);
+        this.sprite.setInteractive();
 
         this.bullets = scene.physics.add.group({
             classType: Phaser.Physics.Arcade.Image,
@@ -53,14 +54,14 @@ export default class Player {
         if (this.isMega) {
             const bullet1 = this.bullets.get(
                 this.sprite.x - 23,
-                this.sprite.y - 30,
+                this.sprite.y,
                 "sheet",
                 "laserGreen02.png"
             ) as Phaser.Physics.Arcade.Image;
 
             const bullet2 = this.bullets.get(
                 this.sprite.x + 23,
-                this.sprite.y - 30,
+                this.sprite.y,
                 "sheet",
                 "laserGreen02.png"
             ) as Phaser.Physics.Arcade.Image;
