@@ -218,18 +218,31 @@ export default class Player {
         console.log(this.health, ">", amount);
         if (this.health <= 0) {
             this.sprite.destroy();
+            this.gameover(this.sprite.x, this.sprite.y);
             if (this.fireTimer) this.fireTimer.remove(false);
             this.bullets.children.each((b) => {
                 const bullet = b as Phaser.Physics.Arcade.Image;
                 bullet.destroy();
                 return null;
             });
-            this.scene.scene.start("GameOver", {
-                score: (this.scene as any).ui.score,
+
+            this.scene.time.delayedCall(2000, () => {
+                this.scene.scene.start("GameOver", {
+                    score: (this.scene as any).ui.score,
+                });
             });
         }
     }
 
+    private gameover(x: number, y: number) {
+        const explo = this.scene.physics.add.sprite(x, y, "explosion");
+        explo.setScale(0.5);
+        explo.play("explosion");
+
+        explo.once("animationcomplete", () => {
+            explo.destroy();
+        });
+    }
     public increaseHealth(amount: number = 1) {
         if (this.health < 3) {
             this.health += amount;
