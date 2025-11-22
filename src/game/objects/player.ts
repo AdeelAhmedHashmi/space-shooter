@@ -10,16 +10,15 @@ export default class Player {
     private upgradeIndicator: Phaser.GameObjects.Sprite;
     private shieldTimer: Phaser.GameObjects.Text;
     private upgradeTimer: Phaser.GameObjects.Text;
-
-    // constants
+    private shieldExpireTime = 0;
+    private upgradeExpireTime = 0;
+    private fireRate = 200;
 
     public health: number = 4;
     public bullets: Phaser.Physics.Arcade.Group;
     public sprite: Phaser.Physics.Arcade.Sprite;
-    public readonly shieldDuration = 7000; // ms
     public readonly upgradeDuration = 7000; // ms
-    private shieldExpireTime = 0;
-    private upgradeExpireTime = 0;
+    public readonly shieldDuration = 7000; // ms
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         this.scene = scene;
@@ -38,7 +37,7 @@ export default class Player {
         });
 
         this.fireTimer = scene.time.addEvent({
-            delay: 200,
+            delay: this.fireRate,
             loop: true,
             callback: () => this.fire(),
         });
