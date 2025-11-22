@@ -33,7 +33,7 @@ The project demonstrates advanced game-state management, dynamic rendering and m
 Add your deployed link here:
 
 ```
-https://ship-shooter.netlify.app
+https://shipshooter.netlify.app
 ```
 
 ---
