@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import SETTINGS from "../settings";
 
 export default class Enemy {
     scene: Phaser.Scene;
@@ -58,11 +59,9 @@ export default class Enemy {
         bullet.setVisible(true);
         bullet.setScale(0.3);
 
-        const bulletSpeed = Phaser.Math.Between(150, 400);
+        const bulletSpeed = SETTINGS.ENEMY_FALLING_SPEED * 100;
 
         bullet.setVelocityY(bulletSpeed);
-
-        // (this.scene as any).enemyBullets.add(bullet);
     }
 
     hit(damage = 1) {
@@ -74,21 +73,5 @@ export default class Enemy {
 
     destroy() {
         this.sprite.destroy();
-    }
-
-    update() {
-        if (this.sprite.y > this.scene.scale.height + 50) {
-            this.sprite.destroy();
-        }
-
-        this.bullets.children.each((b) => {
-            const bullet = b as Phaser.Physics.Arcade.Image;
-
-            if (bullet.y > this.scene.scale.height + 20) {
-                bullet.destroy();
-            }
-
-            return null;
-        });
     }
 }

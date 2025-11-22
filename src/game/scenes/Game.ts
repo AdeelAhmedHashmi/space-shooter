@@ -3,10 +3,9 @@ import { EventBus } from "../EventBus";
 import Player from "../objects/player";
 import Enemy from "../objects/enemy";
 import UiManager from "../managers/uiManager";
-import Meteor from "../objects/metior";
-import Health from "../objects/bouns/health";
-import Shield from "../objects/bouns/shield";
-import Booster from "../objects/bouns/booster";
+import EventManager from "../managers/Eventmanager";
+import SETTINGS from "../settings";
+import CollisionManager from "../managers/CollisionManager";
 
 export class GameScene extends Phaser.Scene {
     ui: UiManager;
@@ -29,11 +28,32 @@ export class GameScene extends Phaser.Scene {
             "space-shooter/sheet.xml"
         );
         this.load.image("bg", "space-shooter/background/black.png");
+        this.load.image("megaenemy", "space-shooter/megaenemy.png");
+        this.load.spritesheet(
+            "explosion",
+            "space-shooter/effects/explosion.png",
+            {
+                frameWidth: 601 / 6,
+                frameHeight: 576 / 6,
+            }
+        );
     }
 
     create() {
         const w = this.scale.width; // game width
         const h = this.scale.height; // game height
+
+        // this.add.image(200, 200, "megaenemy").setDepth(6).setScale(0.5);
+
+        this.anims.create({
+            key: "explosion",
+            frames: this.anims.generateFrameNumbers("explosion", {
+                start: 0,
+                end: 33,
+            }),
+            frameRate: 16,
+            repeat: 0,
+        });
 
         const bg = this.add.image(0, 0, "bg").setOrigin(0);
         this.ui = new UiManager(this);
@@ -53,156 +73,40 @@ export class GameScene extends Phaser.Scene {
         this.shields = this.physics.add.group();
         this.boosters = this.physics.add.group();
 
-        this.time.addEvent({
-            delay: 20000,
-            loop: true,
-            callback: () => {
-                new Health(
-                    this,
-                    this.healths,
-                    Phaser.Math.Between(0, this.scale.width),
-                    -50
-                );
-            },
-        });
+        new EventManager(
+            this,
+            this.player,
+            this.healths,
+            this.shields,
+            this.boosters,
+            this.enemyBullets,
+            this.enemies
+        );
 
-        this.time.addEvent({
-            delay: 10000,
-            loop: true,
-            callback: () => {
-                new Booster(
-                    this,
-                    this.boosters,
-                    Phaser.Math.Between(0, this.scale.width),
-                    -50
-                );
-            },
-        });
+        new CollisionManager(
+            this,
+            this.player,
+            this.healths,
+            this.shields,
+            this.boosters,
+            this.enemyBullets,
+            this.enemies,
+            this.ui
+        );
 
-        this.time.addEvent({
-            delay: 15000,
-            loop: true,
-            callback: () => {
-                new Shield(
-                    this,
-                    this.shields,
-                    Phaser.Math.Between(0, this.scale.width),
-                    -50
-                );
-            },
-        });
-
+        // Events Depends on main Game class
         this.time.addEvent({
             delay: 1000,
             loop: true,
             callback: () => this.spawnEnemy(),
         });
 
-        this.time.addEvent({
-            delay: 300,
-            loop: true,
-            callback: () => {
-                new Meteor(this, Phaser.Math.Between(0, this.scale.width), -50);
-            },
-        });
-
-        // destroy enemy wit bulits
-        this.physics.add.overlap(
-            this.player.bullets,
-            this.enemies,
-            (bullet, enemy) => {
-                const b = bullet as Phaser.Physics.Arcade.Image;
-                const e = enemy as Phaser.Physics.Arcade.Sprite;
-                b.destroy();
-                const enemyObj = e.getData("ref") as Enemy;
-                enemyObj.hit(1); // 1 damage per bullet
-                this.ui.addScore(1);
-            }
-        );
-
-        this.physics.add.overlap(
-            this.player.sprite,
-            this.healths,
-            (_, health) => {
-                const h = health as Phaser.Physics.Arcade.Sprite;
-
-                const healthObj = h.getData("ref") as Health;
-                this.player.increaseHealth(1);
-                this.ui.updateHealth(this.player.health);
-
-                healthObj.destroy();
-            }
-        );
-
-        this.physics.add.overlap(
-            this.player.sprite,
-            this.shields,
-            (_, shield) => {
-                const h = shield as Phaser.Physics.Arcade.Sprite;
-
-                const shieldObj = h.getData("ref") as Shield;
-                this.player.makeShield();
-
-                shieldObj.destroy();
-            }
-        );
-
-        this.physics.add.overlap(
-            this.player.sprite,
-            this.boosters,
-            (_, booster) => {
-                const h = booster as Phaser.Physics.Arcade.Sprite;
-
-                const boosterObj = h.getData("ref") as Shield;
-                this.player.upgradeShip();
-
-                boosterObj.destroy();
-            }
-        );
-
-        this.physics.add.overlap(
-            this.player.bullets,
-            this.enemyBullets,
-            (bullet, enemyBullets) => {
-                const b = bullet as Phaser.Physics.Arcade.Image;
-                b.destroy();
-                enemyBullets.destroy();
-            }
-        );
-
-        // colllision of player with enemy bullets
-        this.physics.add.overlap(
-            this.player.sprite,
-            this.enemyBullets,
-            (_, bullet) => {
-                bullet.destroy();
-                this.player.takeHit(1);
-                this.ui.updateHealth(this.player.health);
-                console.log("Player hit by enemy bullet!");
-            }
-        );
-
-        // cllision of player wiht enemy
-        this.physics.add.collider(
-            this.player.sprite,
-            this.enemies,
-            (_, enemySprite) => {
-                const enemy = enemySprite as Phaser.Physics.Arcade.Sprite;
-                const enemyObj = enemy.getData("ref") as Enemy;
-
-                if (enemyObj) enemyObj.destroy();
-                this.player.takeHit(1);
-                this.ui.updateHealth(this.player.health);
-                console.log("Player hit!");
-            }
-        );
-
         EventBus.emit("current-scene-ready", this);
     }
 
     spawnEnemy() {
         const x = Phaser.Math.Between(50, this.scale.width - 50);
-        const y = -50; // spawn above screen
+        const y = -50;
         const enemy = new Enemy(
             this,
             this.enemyBullets,
@@ -219,10 +123,12 @@ export class GameScene extends Phaser.Scene {
 
         this.enemies.children.each((e) => {
             const enemySprite = e as Phaser.Physics.Arcade.Sprite;
-            enemySprite.y += 1.5;
+            enemySprite.y += SETTINGS.ENEMY_FALLING_SPEED;
             if (enemySprite.y > this.scale.height + 50) enemySprite.destroy();
             return null;
         });
+
+        SETTINGS.ENEMY_FALLING_SPEED += 0.0001;
     }
 }
 
