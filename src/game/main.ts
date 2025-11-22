@@ -1,7 +1,7 @@
 import { GameScene as MainGame } from "./scenes/Game";
 import { AUTO, Game, Types } from "phaser";
 import GameOver from "./scenes/GameOver";
-// import Start from "./scenes/Start";
+import Start from "./scenes/Start";
 
 const config: Types.Core.GameConfig = {
     type: AUTO,
@@ -17,7 +17,7 @@ const config: Types.Core.GameConfig = {
             debug: false,
         },
     },
-    scene: [MainGame, GameOver],
+    scene: [Start, MainGame, GameOver],
 };
 
 const StartGame = (parent: string) => {
