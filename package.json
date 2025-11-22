@@ -12,6 +12,9 @@
         "build-nolog": "vite build --config vite/config.prod.mjs"
     },
     "dependencies": {
+        "@capacitor/android": "^7.4.4",
+        "@capacitor/cli": "^7.4.4",
+        "@capacitor/core": "^7.4.4",
         "phaser": "^3.90.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
@@ -32,4 +35,3 @@
         "vite": "^6.3.1"
     }
 }
-
