@@ -30,8 +30,6 @@ The project demonstrates advanced game-state management, dynamic rendering and m
 
 ## **Live Demo**
 
-Add your deployed link here:
-
 ```
 https://shipshooter.netlify.app
 ```
