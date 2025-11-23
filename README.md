@@ -82,7 +82,7 @@ Different types include slow drones, fast scouts, and armored units.
 ### Power-Ups
 
 -   Shield: temporary protection against damage
--   Health Booster: increases points gained
+-   Health Booster: increases player health
 -   Rapid Fire: increases firing rate
 
 ### Game Loop
@@ -159,5 +159,5 @@ MIT License
 
 ```
 Created by Adeel Ahmed
-Web Developer & 2D Game Developer
+A Full stack Web Developer & 2D Game Developer
 ```
