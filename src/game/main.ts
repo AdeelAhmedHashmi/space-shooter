@@ -5,9 +5,11 @@ import Start from "./scenes/Start";
 
 const config: Types.Core.GameConfig = {
     type: AUTO,
+    width: window.innerWidth,
+    height: window.innerHeight,
     scale: {
-        height: window.innerHeight,
-        width: window.innerWidth,
+        mode: Phaser.Scale.RESIZE,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     backgroundColor: "red",
     physics: {

@@ -57,10 +57,7 @@ export class GameScene extends Phaser.Scene {
 
         const bg = this.add.image(0, 0, "bg").setOrigin(0);
         this.ui = new UiManager(this);
-        bg.setDisplaySize(
-            this.game.config.width as number,
-            this.game.config.height as number
-        );
+        bg.setDisplaySize(this.scale.width, this.scale.height);
 
         this.player = new Player(this, w / 2, h - 20);
 
@@ -101,6 +98,9 @@ export class GameScene extends Phaser.Scene {
             callback: () => this.spawnEnemy(),
         });
 
+        this.scale.on("resize", () => {
+            bg.setDisplaySize(this.scale.width, this.scale.height);
+        });
         EventBus.emit("current-scene-ready", this);
     }
 

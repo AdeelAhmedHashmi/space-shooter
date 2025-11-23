@@ -113,18 +113,18 @@ export default class Player {
 
             bullet1.setActive(true);
             bullet1.setVisible(true);
-            bullet1.setVelocityY(-400);
+            bullet1.setVelocityY(400 * -1);
             bullet1.setVelocityX(-20);
             bullet1.setScale(0.3);
 
             bullet.setActive(true);
             bullet.setVisible(true);
-            bullet.setVelocityY(-400);
+            bullet.setVelocityY(400 * -1);
             bullet.setScale(0.3);
 
             bullet2.setActive(true);
             bullet2.setVisible(true);
-            bullet2.setVelocityY(-400);
+            bullet2.setVelocityY(400 * -1);
             bullet2.setVelocityX(20);
             bullet2.setScale(0.3);
         } else {
