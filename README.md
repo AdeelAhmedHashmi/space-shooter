@@ -159,5 +159,5 @@ MIT License
 
 ```
 Created by Adeel Ahmed
-A Full stack Web Developer & 2D Game Developer
+A Full stack Web Developer
 ```
