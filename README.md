@@ -162,5 +162,5 @@ MIT License
 
 ```
 Created by Adeel Ahmed
-A Full stack Web Developer
+A Developer
 ```
