@@ -9,7 +9,11 @@ export default defineConfig({
         react(),
         VitePWA({
             registerType: "autoUpdate",
-            includeAssets: ["favicon.ico"],
+            includeAssets: [
+                "favicon.ico",
+                "fonts/heading.otf",
+                "fonts/normal.otf",
+            ],
             manifest: {
                 name: "Space Shooter Game",
                 short_name: "SpaceShooter",
@@ -37,4 +41,3 @@ export default defineConfig({
         port: 8080,
     },
 });
-
