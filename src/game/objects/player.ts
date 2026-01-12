@@ -26,7 +26,7 @@ export default class Player {
             x,
             y,
             "sheet",
-            "playerShip1_green.png"
+            "playerShip1_green.png",
         );
         this.sprite.setScale(0.5);
         this.sprite.setInteractive();
@@ -70,7 +70,7 @@ export default class Player {
             {
                 fontStyle: "bold",
                 fontFamily: "normal",
-            }
+            },
         );
 
         this.upgradeExpireTime = this.scene.time.now + this.upgradeDuration;
@@ -92,21 +92,21 @@ export default class Player {
                 this.sprite.x - 23,
                 this.sprite.y,
                 "sheet",
-                "laserGreen02.png"
+                "laserGreen02.png",
             ) as Phaser.Physics.Arcade.Image;
 
             const bullet = this.bullets.get(
                 this.sprite.x,
                 this.sprite.y - 30,
                 "sheet",
-                "laserGreen02.png"
+                "laserGreen02.png",
             ) as Phaser.Physics.Arcade.Image;
 
             const bullet2 = this.bullets.get(
                 this.sprite.x + 23,
                 this.sprite.y,
                 "sheet",
-                "laserGreen02.png"
+                "laserGreen02.png",
             ) as Phaser.Physics.Arcade.Image;
 
             if (!bullet1 || !bullet2) return;
@@ -132,7 +132,7 @@ export default class Player {
                 this.sprite.x,
                 this.sprite.y - 30,
                 "sheet",
-                "laserGreen02.png"
+                "laserGreen02.png",
             ) as Phaser.Physics.Arcade.Image;
 
             if (!bullet2) return;
@@ -153,7 +153,7 @@ export default class Player {
                 this.scene.scale.width - 25,
                 60,
                 "sheet",
-                "shield_bronze.png"
+                "shield_bronze.png",
             )
             .setScale(0.8);
 
@@ -161,7 +161,7 @@ export default class Player {
             this.sprite.x,
             this.sprite.y,
             "sheet",
-            "shield3.png"
+            "shield3.png",
         );
 
         this.shieldTimer = this.scene.add.text(
@@ -171,7 +171,7 @@ export default class Player {
             {
                 fontStyle: "bold",
                 fontFamily: "normal",
-            }
+            },
         );
 
         this.shield.setScale(0.5);
@@ -227,6 +227,9 @@ export default class Player {
             });
 
             this.scene.time.delayedCall(2000, () => {
+                const currentSceneKey = this.scene.key;
+                this.scene.stop(currentSceneKey);
+
                 this.scene.scene.start("GameOver", {
                     score: (this.scene as any).ui.score,
                 });
@@ -268,7 +271,7 @@ export default class Player {
 
         if (this.isMega) {
             this.upgradeTimer.setText(
-                this.getUpgradeRemainingTime().toString()
+                this.getUpgradeRemainingTime().toString(),
             );
         } else {
             this.upgradeTimer?.destroy();

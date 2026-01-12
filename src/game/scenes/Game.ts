@@ -25,7 +25,7 @@ export class GameScene extends Phaser.Scene {
         this.load.atlasXML(
             "sheet",
             "space-shooter/sheet.png",
-            "space-shooter/sheet.xml"
+            "space-shooter/sheet.xml",
         );
         this.load.image("bg", "space-shooter/background/black.png");
         this.load.image("megaenemy", "space-shooter/megaenemy.png");
@@ -35,7 +35,7 @@ export class GameScene extends Phaser.Scene {
             {
                 frameWidth: 601 / 6,
                 frameHeight: 576 / 6,
-            }
+            },
         );
     }
 
@@ -77,7 +77,7 @@ export class GameScene extends Phaser.Scene {
             this.shields,
             this.boosters,
             this.enemyBullets,
-            this.enemies
+            this.enemies,
         );
 
         new CollisionManager(
@@ -88,7 +88,7 @@ export class GameScene extends Phaser.Scene {
             this.boosters,
             this.enemyBullets,
             this.enemies,
-            this.ui
+            this.ui,
         );
 
         // Events Depends on main Game class
@@ -112,7 +112,7 @@ export class GameScene extends Phaser.Scene {
             this.enemyBullets,
             x,
             y,
-            Phaser.Math.Between(3, 8)
+            Phaser.Math.Between(3, 8),
         );
         enemy.sprite.setData("ref", enemy);
         this.enemies.add(enemy.sprite);
@@ -131,4 +131,3 @@ export class GameScene extends Phaser.Scene {
         SETTINGS.ENEMY_FALLING_SPEED += 0.0001;
     }
 }
-
