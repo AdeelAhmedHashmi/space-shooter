@@ -1,4 +1,5 @@
 # **Space Shooter – A Modern Browser Arcade Game**
+## Demo preview
 <p align="center">
 <img src="./start-screenshort.png" width="47%"/>
 <img src="./game-screenshort.png" width="47%"/>
