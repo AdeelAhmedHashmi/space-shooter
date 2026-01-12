@@ -227,8 +227,8 @@ export default class Player {
             });
 
             this.scene.time.delayedCall(2000, () => {
-                const currentSceneKey = this.scene.key;
-                this.scene.stop(currentSceneKey);
+                const currentSceneKey = this.scene.scene.key;
+                this.scene.scene.stop(currentSceneKey);
 
                 this.scene.scene.start("GameOver", {
                     score: (this.scene as any).ui.score,
