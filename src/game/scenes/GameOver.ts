@@ -10,7 +10,13 @@ export default class GameOver extends Phaser.Scene {
     init(data: { score: number }) {
         this.finalScore = data.score;
     }
+    preload() {
+        this.load.setPath("assets");
+        this.load.audio("gameover", "space-shooter/sounds/game-over.wav");
+    }
     create() {
+        this.sound.add("gameover").play({ loop: false });
+
         const { width, height } = this.scale;
         this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0);
 

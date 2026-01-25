@@ -20,7 +20,12 @@ export default class Player {
     public readonly upgradeDuration = 7000; // ms
     public readonly shieldDuration = 7000; // ms
 
-    constructor(scene: Phaser.Scene, x: number, y: number) {
+    constructor(
+        scene: Phaser.Scene,
+        x: number,
+        y: number,
+        private readonly sounds: Record<string, Phaser.Sound.BaseSound>,
+    ) {
         this.scene = scene;
         this.sprite = scene.physics.add.sprite(
             x,
@@ -87,6 +92,7 @@ export default class Player {
         if (!this.sprite.active) return;
         if (this.bulletsBreak) return;
 
+        this.sounds.fire.play();
         if (this.isMega) {
             const bullet1 = this.bullets.get(
                 this.sprite.x - 23,
@@ -218,6 +224,7 @@ export default class Player {
         console.log(this.health, ">", amount);
         if (this.health <= 0) {
             this.sprite.destroy();
+            this.sounds.bomb.play();
             this.gameover(this.sprite.x, this.sprite.y);
             if (this.fireTimer) this.fireTimer.remove(false);
             this.bullets.children.each((b) => {

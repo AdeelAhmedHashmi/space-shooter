@@ -15,7 +15,8 @@ export default class CollisionManager {
         private boosters: Phaser.Physics.Arcade.Group,
         private enemyBullets: Phaser.Physics.Arcade.Group,
         private enemies: Phaser.Physics.Arcade.Group,
-        private ui: UiManager
+        private ui: UiManager,
+        private readonly sounds: Record<string, Phaser.Sound.BaseSound>,
     ) {
         this.configureCollisions();
     }
@@ -32,10 +33,11 @@ export default class CollisionManager {
                 const enemyObj = e.getData("ref") as Enemy;
                 enemyObj.hit(1); // 1 damage per bullet
                 if (enemyObj.health < 1) {
+                    this.sounds.bomb.play();
                     this.explosion(e.x, e.y);
                 }
                 this.ui.addScore(1);
-            }
+            },
         );
 
         // Player & Bonus Health
@@ -50,7 +52,7 @@ export default class CollisionManager {
                 this.ui.updateHealth(this.player.health);
 
                 healthObj.destroy();
-            }
+            },
         );
 
         // Player & Bonus Shield
@@ -64,7 +66,7 @@ export default class CollisionManager {
                 this.player.makeShield();
 
                 shieldObj.destroy();
-            }
+            },
         );
 
         // Player & Bonus Booster
@@ -78,7 +80,7 @@ export default class CollisionManager {
                 this.player.upgradeShip();
 
                 boosterObj.destroy();
-            }
+            },
         );
 
         // Bullets & Bullets
@@ -89,7 +91,7 @@ export default class CollisionManager {
                 const b = bullet as Phaser.Physics.Arcade.Image;
                 b.destroy();
                 enemyBullets.destroy();
-            }
+            },
         );
 
         // Player & Enemy Bullets
@@ -104,7 +106,7 @@ export default class CollisionManager {
                 }
                 this.ui.updateHealth(this.player.health);
                 console.log("Player hit by enemy bullet!");
-            }
+            },
         );
 
         // Player & Enemy
@@ -121,7 +123,7 @@ export default class CollisionManager {
                 this.player.takeHit(1);
                 this.ui.updateHealth(this.player.health);
                 console.log("Player hit!");
-            }
+            },
         );
     }
 

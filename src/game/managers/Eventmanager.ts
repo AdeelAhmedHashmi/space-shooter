@@ -13,7 +13,7 @@ export default class EventManager {
         private shields: Phaser.Physics.Arcade.Group,
         private boosters: Phaser.Physics.Arcade.Group,
         private enemyBullets: Phaser.Physics.Arcade.Group,
-        private enemies: Phaser.Physics.Arcade.Group
+        private enemies: Phaser.Physics.Arcade.Group,
     ) {
         this.configureEvents();
     }
@@ -27,7 +27,7 @@ export default class EventManager {
                     this.scene,
                     this.healths,
                     Phaser.Math.Between(0, this.scene.scale.width),
-                    -50
+                    -50,
                 );
             },
         });
@@ -40,7 +40,7 @@ export default class EventManager {
                     this.scene,
                     this.boosters,
                     Phaser.Math.Between(0, this.scene.scale.width),
-                    -50
+                    -50,
                 );
             },
         });
@@ -53,7 +53,7 @@ export default class EventManager {
                     this.scene,
                     this.shields,
                     Phaser.Math.Between(0, this.scene.scale.width),
-                    -50
+                    -50,
                 );
             },
         });
@@ -65,7 +65,7 @@ export default class EventManager {
                 new Meteor(
                     this.scene,
                     Phaser.Math.Between(0, this.scene.scale.width),
-                    -50
+                    -50,
                 );
             },
         });

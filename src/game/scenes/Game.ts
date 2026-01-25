@@ -29,6 +29,8 @@ export class GameScene extends Phaser.Scene {
         );
         this.load.image("bg", "space-shooter/background/black.png");
         this.load.image("megaenemy", "space-shooter/megaenemy.png");
+        this.load.audio("fire", "space-shooter/sounds/fire.mp3");
+        this.load.audio("bomb", "space-shooter/sounds/bomb.wav");
         this.load.spritesheet(
             "explosion",
             "space-shooter/effects/explosion.png",
@@ -59,7 +61,17 @@ export class GameScene extends Phaser.Scene {
         this.ui = new UiManager(this);
         bg.setDisplaySize(this.scale.width, this.scale.height);
 
-        this.player = new Player(this, w / 2, h - 20);
+        const fireSound = this.sound.add("fire", {
+            loop: false,
+            volume: 0.2,
+        });
+        const bombSound = this.sound.add("bomb", {
+            loop: false,
+        });
+        this.player = new Player(this, w / 2, h - 20, {
+            fire: fireSound,
+            bomb: bombSound,
+        });
 
         this.enemies = this.physics.add.group();
         this.enemyBullets = this.physics.add.group({
@@ -89,6 +101,9 @@ export class GameScene extends Phaser.Scene {
             this.enemyBullets,
             this.enemies,
             this.ui,
+            {
+                bomb: bombSound,
+            },
         );
 
         // Events Depends on main Game class
