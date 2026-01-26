@@ -15,7 +15,6 @@ const config: Types.Core.GameConfig = {
     physics: {
         default: "arcade",
         arcade: {
-            // gravity: { x: 0, y: 20000 },
             debug: false,
         },
     },
@@ -27,4 +26,3 @@ const StartGame = (parent: string) => {
 };
 
 export default StartGame;
-

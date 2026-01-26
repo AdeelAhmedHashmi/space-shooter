@@ -82,15 +82,7 @@ export class GameScene extends Phaser.Scene {
         this.shields = this.physics.add.group();
         this.boosters = this.physics.add.group();
 
-        new EventManager(
-            this,
-            this.player,
-            this.healths,
-            this.shields,
-            this.boosters,
-            this.enemyBullets,
-            this.enemies,
-        );
+        new EventManager(this, this.healths, this.shields, this.boosters);
 
         new CollisionManager(
             this,

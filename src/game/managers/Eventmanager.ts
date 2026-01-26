@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import Player from "../objects/player";
 import Meteor from "../objects/metior";
 import Shield from "../objects/bouns/shield";
 import Booster from "../objects/bouns/booster";
@@ -8,19 +7,16 @@ import Health from "../objects/bouns/health";
 export default class EventManager {
     constructor(
         private scene: Phaser.Scene,
-        private player: Player,
         private healths: Phaser.Physics.Arcade.Group,
         private shields: Phaser.Physics.Arcade.Group,
         private boosters: Phaser.Physics.Arcade.Group,
-        private enemyBullets: Phaser.Physics.Arcade.Group,
-        private enemies: Phaser.Physics.Arcade.Group,
     ) {
         this.configureEvents();
     }
 
     private configureEvents() {
         this.scene.time.addEvent({
-            delay: 20000,
+            delay: 200,
             loop: true,
             callback: () => {
                 new Health(
@@ -33,7 +29,7 @@ export default class EventManager {
         });
 
         this.scene.time.addEvent({
-            delay: 10000,
+            delay: 100,
             loop: true,
             callback: () => {
                 new Booster(
@@ -46,7 +42,7 @@ export default class EventManager {
         });
 
         this.scene.time.addEvent({
-            delay: 15000,
+            delay: 150,
             loop: true,
             callback: () => {
                 new Shield(

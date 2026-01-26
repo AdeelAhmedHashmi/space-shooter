@@ -12,7 +12,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #000000;
-    font-family: "Heading", Helvetica, sans-serif;
+    font-family: "Heading", Arial, Helvetica, sans-serif;
     overflow: hidden;
 }
 * {
@@ -37,9 +37,4 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-}
-
-.spritePosition {
-    margin: 10px 0 0 10px;
-    font-size: 0.8em;
 }

@@ -65,12 +65,12 @@ export default class Player {
     public upgradeShip() {
         if (this.isMega) return;
         this.upgradeIndicator = this.scene.add
-            .sprite(this.scene.scale.width - 25, 30, "sheet", "bolt_bronze.png")
+            .sprite(30, 110, "sheet", "bolt_bronze.png")
             .setScale(0.8);
 
         this.upgradeTimer = this.scene.add.text(
-            this.scene.scale.width - 55,
-            25,
+            60,
+            100,
             this.getUpgradeRemainingTime().toString(),
             {
                 fontStyle: "bold",
@@ -155,29 +155,24 @@ export default class Player {
         this.isProtected = true;
         this.shieldExpireTime = this.scene.time.now + this.shieldDuration;
         this.shieldIndicator = this.scene.add
-            .sprite(
-                this.scene.scale.width - 25,
-                60,
-                "sheet",
-                "shield_bronze.png",
-            )
+            .sprite(30, 150, "sheet", "shield_bronze.png")
             .setScale(0.8);
+
+        this.shieldTimer = this.scene.add.text(
+            60,
+            140,
+            this.getShieldRemainingTime().toString(),
+            {
+                fontStyle: "bold",
+                fontFamily: "normal",
+            },
+        );
 
         this.shield = this.scene.physics.add.sprite(
             this.sprite.x,
             this.sprite.y,
             "sheet",
             "shield3.png",
-        );
-
-        this.shieldTimer = this.scene.add.text(
-            this.scene.scale.width - 55,
-            55,
-            this.getShieldRemainingTime().toString(),
-            {
-                fontStyle: "bold",
-                fontFamily: "normal",
-            },
         );
 
         this.shield.setScale(0.5);

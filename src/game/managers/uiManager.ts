@@ -1,15 +1,13 @@
 import Phaser from "phaser";
 
 export default class UiManager {
-    private scene: Phaser.Scene;
     private score: number = 0;
     private health: number = 3;
     private scoreText: Phaser.GameObjects.Text;
     private healthText: Phaser.GameObjects.Text;
 
-    constructor(scene: Phaser.Scene) {
-        this.scene = scene;
-        this.scoreText = scene.add
+    constructor(private readonly scene: Phaser.Scene) {
+        this.scoreText = this.scene.add
             .text(20, 20, `Score: ${this.score}`, {
                 fontSize: "16px",
                 color: "#fff",
@@ -17,7 +15,7 @@ export default class UiManager {
             })
             .setDepth(999);
 
-        this.healthText = scene.add
+        this.healthText = this.scene.add
             .text(20, 55, `Health: ${this.health}`, {
                 fontSize: "16px",
                 color: "#ff6961",
@@ -29,7 +27,7 @@ export default class UiManager {
     updateHealth(newHealth: number) {
         console.log(
             "this.health: " + this.health,
-            "player.health: " + newHealth
+            "player.health: " + newHealth,
         );
         this.health = newHealth;
         this.healthText.setText("Health: " + this.health);
