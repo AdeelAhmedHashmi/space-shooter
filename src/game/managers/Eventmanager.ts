@@ -16,7 +16,7 @@ export default class EventManager {
 
     private configureEvents() {
         this.scene.time.addEvent({
-            delay: 200,
+            delay: 20000,
             loop: true,
             callback: () => {
                 new Health(
@@ -29,7 +29,7 @@ export default class EventManager {
         });
 
         this.scene.time.addEvent({
-            delay: 100,
+            delay: 10000,
             loop: true,
             callback: () => {
                 new Booster(
@@ -42,7 +42,7 @@ export default class EventManager {
         });
 
         this.scene.time.addEvent({
-            delay: 150,
+            delay: 15000,
             loop: true,
             callback: () => {
                 new Shield(
@@ -55,7 +55,7 @@ export default class EventManager {
         });
 
         this.scene.time.addEvent({
-            delay: 300,
+            delay: 30000,
             loop: true,
             callback: () => {
                 new Meteor(
