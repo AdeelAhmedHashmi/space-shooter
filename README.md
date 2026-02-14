@@ -4,7 +4,7 @@
 <img src="./start-screenshort.png" width="47%"/>
 <img src="./game-screenshort.png" width="47%"/>
 </p>
-A high-performance, fast-paced space combat game built using **React**, **TypeScript**, **Phaser 3**, and **Vite**.
+A high-performance, fast-paced space combat game built using **React** , **TypeScript** , **Phaser 3** , and **Vite** .
 The project demonstrates advanced game-state management, dynamic rendering and mobile-first optimization inside a modern web framework.
 
 ---
